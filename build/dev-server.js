@@ -74,6 +74,7 @@ var readyPromise = new Promise(resolve => {
 })
 
 console.log('> Starting dev server...')
+console.log(`> at ${host}:${port}`)
 devMiddleware.waitUntilValid(() => {
   console.log('> Listening at ' + uri + '\n')
   // when env is testing, don't need open it

@@ -1,14 +1,27 @@
+
 <template>
-  <div :style = 'styles.frame'>
-    <div :style = 'styles.left_side_bar'>
+  <splitwindow>
+    <div :style = 'styles.left_side_bar' slot='win1'>
     </div>
-    <div :style = 'styles.drag_border'/>
-    <div :style = 'styles.main_content'>
+    <!--
+    <div 
+      :style         = 'styles.drag_border'
+      @mousedown     = "willDrag"
+      @mousemove     = "dragging"
+      @mouseup       = "dragged"
+      @mouseover     = "dragCancel"
+      @touchstart    = "willDrag"
+      @touchmove     = "dragging"
+      @touchend      = "dragged"
+      @touchcanceled = "dragCancel"/>
+      -->
+    <div :style = 'styles.main_content' slot='win2'>
     </div>
-  </div>
+  </splitwindow>
 </template>
 
 <script>
+import SplitWindow from '@/components/ui/SplitWindow';
 const frame_style = {
   display: 'flex',
   flexDirection: 'row',
@@ -54,7 +67,33 @@ export default {
       default: function () { return main_frame_style; },
     }
   },
-  data: function() { return {}; },
+  data: function() {
+    return {
+      draggingExecutor: () => {},
+    };
+  },
+  methods: {
+    willDrag: function(ev) {
+      console.log('will drag');
+      this.draggingExecutor = ((origX, origY, ev) => {
+        var deltaX = ev.screenX - origX;
+        this.$el.style.transform = 'translate(' + deltaX + 'px, 0)';
+      }).bind(this, ev.screenX, screenY);
+    },
+    dragging: function(ev) {
+      this.draggingExecutor(ev);
+    },
+    dragged: function(ev) {
+      console.log(`dragged`);
+      this.draggingExecutor = () => {};
+    },
+    dragCancel: function(ev) {
+      console.log(`drag canceld`);
+    },
+  },
+  components: {
+    splitwindow: SplitWindow,
+  },
 }
 </script>
 

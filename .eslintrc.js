@@ -18,6 +18,8 @@ module.exports = {
   // add your custom rules here
   'rules': {
     'semi': 0,
+    'no-multi-spaces': 0,
+    'key-spacing': 0,
     'camelcase': 0,
     'comma-dangle': 0,
     'space-before-function-paren': 0,

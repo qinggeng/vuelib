@@ -1,20 +1,8 @@
 
 <template>
-  <splitwindow>
+  <splitwindow :initial_ratio = "'200px:--'">
     <div :style = 'styles.left_side_bar' slot='win1'>
     </div>
-    <!--
-    <div 
-      :style         = 'styles.drag_border'
-      @mousedown     = "willDrag"
-      @mousemove     = "dragging"
-      @mouseup       = "dragged"
-      @mouseover     = "dragCancel"
-      @touchstart    = "willDrag"
-      @touchmove     = "dragging"
-      @touchend      = "dragged"
-      @touchcanceled = "dragCancel"/>
-      -->
     <div :style = 'styles.main_content' slot='win2'>
     </div>
   </splitwindow>
@@ -44,6 +32,7 @@ const left_side_bar_style = {
 
 const main_content_style = {
   flexGrow: 1,
+  height: '100%',
   background: '#0F0',
 };
 

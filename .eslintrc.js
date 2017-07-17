@@ -23,6 +23,7 @@ module.exports = {
     'camelcase': 0,
     'comma-dangle': 0,
     'space-before-function-paren': 0,
+    'brace-style': 0,
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // allow async-await

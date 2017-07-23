@@ -6,8 +6,20 @@
     </div>
     <div :style = "appliedStyles.modal">
       <div 
-        v-for='wnd of modal_stack'  
+        v-for = 'wnd of modal_stack'  
+        ref = 'popups'
         style="
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: rgb(0, 0, 0, 0.0);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      ">
+        <div v-if = "modal_stack.indexOf(wnd) === modal_stack.length - 1" style = "
           position: absolute;
           top: 0;
           bottom: 0;
@@ -17,8 +29,11 @@
           display: flex;
           justify-content: center;
           align-items: center;
-      ">
-        <component :is='wnd' @window-closed='((data)=>{onCloseModalWnd(wnd, data);}).bind(this, wnd)'/>
+        ">
+          <component :is='wnd' @window-closed='((data)=>{onCloseModalWnd(wnd, data);}).bind(this, wnd)'/>
+        </div>
+        <component v-else :is='wnd' @window-closed='((data)=>{onCloseModalWnd(wnd, data);}).bind(this, wnd)'/>
+
       </div>
     </div>
   </div>
@@ -36,6 +51,18 @@ const content_frame_style = {
   left: 0,
   right: 0,
   position: 'absolute',
+};
+
+const mask_style = {
+  position: 'absolute',
+  top: '0',
+  bottom: '0',
+  left: '0',
+  right: '0',
+  background: 'rgb(0, 0, 0, 0.4)',
+  display: 'flex',
+  justifyContent: 'center',
+  alignCtems: 'center',
 };
 
 const main_frame_style = {
@@ -68,6 +95,7 @@ export default {
     return {
       modal_stack: [],
       modal_style: {...modal_style},
+      mask_style: {...mask_style},
       modal_wnd: {
         template: `<div><span>modal place holder</span></div>`,
       },

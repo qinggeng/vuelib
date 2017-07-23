@@ -94,15 +94,19 @@ export default {
         document.onmouseout  = orig.out;
       }).bind(this, originEventHandles);
 
-      document.onmouseup = ((origX, origY, restore, dragTarget, ev) => {
+      document.onmouseup = ((origX, origY, restore, dragTarget, ev) =>
+      {
         dragTarget.style.transform = '';
-        let c1 = this.$refs.container_one;
-        let c2 = this.$refs.container_two;
-        let deltaX = ev.screenX - origX;
-        let newStyle = JSON.parse(JSON.stringify(this.defaultStyle));
+
+        let c1       = this.$refs.container_one;
+        let c2       = this.$refs.container_two;
+        let deltaX   = ev.screenX - origX;
+        let newStyle = {...this.defaultStyle};
+
         newStyle.container_one.width = (c1.clientWidth + deltaX) + 'px';
         newStyle.container_two.width = (c2.clientWidth - deltaX) + 'px';
-        this.defaultStyle = newStyle;
+        this.defaultStyle            = newStyle;
+
         restore();
       }).bind(this, ev.screenX, screenY, recover, ev.target);
 

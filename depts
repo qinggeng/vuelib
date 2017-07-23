@@ -1,0 +1,10 @@
+modal-manager 初始化思考：
+modal-manager必须通过某种方式暴露在某个层次的“全局”中。
+当然，modal-manager并不会直接被客户程序所感知。
+因为客户程序是通过向store提交show_modal的方式来做模态展示的。
+但目前，modal-manager和一个名为“store”的全局变量是强绑定的。
+在created函数中，modal-manager会向store变量注册自身。
+这样不好。
+更好的方式是注入式：
+# 在props中注入store
+# 对注入的store注册自身

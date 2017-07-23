@@ -78,7 +78,6 @@ export default {
       this.modal_stack.push(comp);
     },
     onCloseModalWnd: function(wnd, data) {
-      // this.modal_stack.pop((this.modal_stack.indexOf(wnd)));
       this.modal_stack = this.modal_stack.filter(x => x !== wnd);
     },
   },

@@ -32,6 +32,29 @@ const filter = (node, predict, get_children, add_children, slice_node) =>
   return new_node;
 };
 
+const filter_tree = (tree, funcs) =>
+{
+  var filtered_nodes = funcs.get_nodes(tree).map(node=>
+  {
+    if (funcs.predict(node))
+    {
+      return funcs.slice_subtree(node);
+    }
+    var children = funcs.get_children(node);
+    if (children != undefined)
+    {
+      var filtered_children = filter_tree(children, funcs);
+      if (filtered_children.length > 0)
+      {
+        var filtered_node = funcs.slice_node(node);
+        funcs.add_children(filtered_node, filtered_children);
+        return filtered_node;
+      }
+    }
+  }).filter(x=>x !== undefined);
+  return funcs.build_filtered_tree(filtered_nodes, tree);
+}
+
 /**
  * @function arr2tree
  * @brief array -> arr2tree -> tree
@@ -119,6 +142,7 @@ const build_prefix_tree = (arr, tree, funcs) =>
 }
 /**
  * 构造广义前缀树的例子
+ *
  * const folders = `
  * src
  * src/assets
@@ -172,9 +196,64 @@ const build_prefix_tree = (arr, tree, funcs) =>
  *   get_element,
  *   get_rest,
  * })));
- *  */
+ */
+const folders = `
+src
+src/assets
+src/components
+src/components/bz
+src/components/bz/demo
+src/components/ui
+src/libs
+src/libs/ADT
+src/libs/ADT/abstract-tree
+src/router
+src/store
+`.trim().split('\n').map(x=>x.split('/'))
 
+var select_node = (elem, tree)=>
+{
+  return tree.filter(x=>x.name === elem)[0];
+}
+
+var append_node = (elem, tree)=>
+{
+  var node = {name: elem, children: []};
+  tree.push(node);
+  return node;
+}
+
+var get_children = (node)=>
+{
+  return node.children;
+}
+
+var get_element = (path)=>
+{
+  return path[0];
+}
+
+var get_rest = (path)=>
+{
+  var ret = path.slice(1);
+  if (ret.length === 0)
+  {
+    return undefined;
+  }
+  return ret;
+}
+
+var tree = build_prefix_tree(folders, [], {
+  select_node,
+  append_node,
+  get_children,
+  get_element,
+  get_rest,
+});
+
+/*
 export {
   filter,
   build_prefix_tree,
 }
+*/
